@@ -5,17 +5,10 @@ const crudController = require("./crud.controller");
 
 const router = express.Router();
 
-router.post("/", crudController.post(Doctor));
-router.get("/", crudController.getAll(Doctor));
-router.get("/:id", crudController.getOne(Doctor));
-router.get("/clinic/:id", getAllDoctors(Doctor));
-// router.patch("/:id", crudController.updateOne(Product));
-// router.delete("/:id", crudController.deleteOne(Product));
-
 const getAllDoctors = (model) => async (req, res) => {
 	try {
 		const item = await model
-			.find({ clinic: `${params.id}` })
+			.find({ clinic: `${req.params.id}` })
 			.lean()
 			.exec();
 
@@ -24,5 +17,14 @@ const getAllDoctors = (model) => async (req, res) => {
 		return res.status(500).json({ status: "failed", message: e.message });
 	}
 };
+
+router.post("/", crudController.post(Doctor));
+router.get("/", crudController.getAll(Doctor));
+router.get("/:id", crudController.getOne(Doctor));
+router.get("/clinic/:id", getAllDoctors(Doctor));
+// router.patch("/:id", crudController.updateOne(Product));
+// router.delete("/:id", crudController.deleteOne(Product));
+
+
 
 module.exports = router;
